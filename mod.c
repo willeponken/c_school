@@ -79,10 +79,11 @@ int main(int argc, char *argv[]) {
 
 		//make sure were not about to divide with zero
 		if(num_mod != 0 && num_start <= num_end) {
-			//for each number between num_start & num_end (with num_start & num_end)
 			printf("Will now test specified values:\n");
-
+			
+				//for each number between num_start & num_end (with num_start & num_end)
 				for(i=num_start; i<=num_end; i++) {
+					
 				//check if dividable
 				if(i%num_mod == 0) {
 					printf("%d IS dividable with %d\n", i, num_mod);
