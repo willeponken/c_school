@@ -34,6 +34,8 @@ int main(int argc, char *argv[]) {
 	int num_start = 0;
 	int num_end = 0;
 	int num_mod = 0;
+	int num_is = 0;
+	int num_isnot = 0;
 
 	//check for arguments:
 	if (argc < 2) {
@@ -79,12 +81,15 @@ int main(int argc, char *argv[]) {
 		if(num_mod != 0 && num_start <= num_end) {
 			//for each number between num_start & num_end (with num_start & num_end)
 			printf("Will now test specified values:\n");
-			for(i=num_start; i<=num_end; i++) {
+
+				for(i=num_start; i<=num_end; i++) {
 				//check if dividable
 				if(i%num_mod == 0) {
 					printf("%d IS dividable with %d\n", i, num_mod);
+					num_is++;
 				} else {
 					printf("%d IS NOT dividable with %d\n", i, num_mod);
+					num_isnot++;
 				}
 			}
 		} else if(num_mod == 0) {
@@ -93,7 +98,7 @@ int main(int argc, char *argv[]) {
 			printf("Please make sure the start number is less than the end number.\n");
 		}
 
-		printf("\nDone, goodbye and have a good day.\n");
+		printf("\nThere was %d not dividable and %d dividable.\nDone, goodbye and have a good day.\n", num_isnot, num_is);
 
 	}
 
