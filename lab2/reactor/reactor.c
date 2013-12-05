@@ -100,13 +100,20 @@ int draw_menu(void) {
 int draw_arena(int btn_pl1, int btn_pl2) {
 
 	//declare variables
-	int row,col;
+	int row, col;
+	int i;
 	//get max y & x value
 	getmaxyx(stdscr, row, col);
 
 	clear();
 
+	const char *btn_ascii[]={"              .,-:;//;:=,", "          . :H@@@MM@M#H/.,+%;,", "       ,/X+ +M@@M@MM%=,-%HMMM@X/,", "     -+@MM; $M@@MH+-,;XMMMM@MMMM@+-", "    ;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.", "  ,%MM@@MH ,@%=             .---=-=:=,.", "  =@#@@@MX.,                -%HX$$%%%:;", " =-./@M@M$                   .;@MMMM@MM:", " X@/ -$MM/                    . +MM@@@M$", ",@M@H: :@:                    . =X#@@@@-", ",@@@MMX, .                    /H- ;@M@M=", ".H@@@@M@+,                    %MM+..%#$.", " /MMMM@MMH/.                  XM@MH; =;", "  /%+%$XHH@$=              , .H@@@@MX,", "   .=--------.           -%H.,@@@@@MX,", "   .%MM@@@HHHXX$$$%+- .:$MMX =M@@MM%.", "     =XMMM@MM@MM#H;,-+HMM@M+ /MMMX=", "       =%@M@M#@$-.=$@MM@@@M; %M%=", "         ,:+$+-,/H#MMMMMMM@= =,", "               =++%%%%+/:-."};
+	
+	for(i=0; i<20;i++){
+		mvprintw((row-20)/2+i, (col-40)/2, "%s\n", btn_ascii[i]);
+	}
 
+	getch();
 
 	return 0;
 }
