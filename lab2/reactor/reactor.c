@@ -81,12 +81,10 @@ int draw_menu(void) {
 			case 121:
 				pl_declared = 1;
 				draw_arena(btn_pl1, btn_pl2);
-				return 0;
 				break;
 			//cancel (c)
 			case 99:
 				endwin();
-				return 0;
 				break;
 			//other button (n etc.)
 			default:
