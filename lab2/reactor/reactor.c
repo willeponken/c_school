@@ -51,8 +51,6 @@ int main(void) {
 	//call menu
 	draw_menu();
 
-	curs_set(1);
-	echo();
 	endwin();
 	return 0;
 }
@@ -76,6 +74,7 @@ int draw_menu(void) {
 		char welcome_pl1[]="Welcome to reactor, please input Player 1's button";	
 		char welcome_pl2[]="Now input Player 2's button";
 		char declared_btn[]="Is this correct? (y/n (c to cancel))";
+		char creator_txt[]="Written with <3 by willeponken";
 
 		clear();
 
@@ -84,18 +83,21 @@ int draw_menu(void) {
 
 		//get player 1's button
 		mvprintw(row/2, (col-strlen(welcome_pl1))/2, "%s", welcome_pl1);
+		mvprintw(1, (col-strlen(creator_txt))/2, "%s", creator_txt);
 		btn_pl1 = getch();
 
 		clear();
 	
 		//get player 2's button
 		mvprintw(row/2, (col-strlen(welcome_pl2))/2, "%s", welcome_pl2);
+		mvprintw(1, (col-strlen(creator_txt))/2, "%s", creator_txt);
 		btn_pl2 = getch();
 
 		clear();
 
 		//print player buttons and ask if it's correct
 		mvprintw(row/2, (col-strlen(declared_btn))/2, "%s", declared_btn);
+		mvprintw(1, (col-strlen(creator_txt))/2, "%s", creator_txt);
 		//turn bold text off
 		attroff(A_BOLD);
 		//print declared player buttons, subtracting with 23 because
@@ -113,6 +115,7 @@ int draw_menu(void) {
 			//cancel (c)
 			case 99:
 				endwin();
+				exit(0);
 				break;
 			//other button (n etc.)
 			default:
@@ -126,17 +129,17 @@ int draw_menu(void) {
 int draw_arena(int btn_pl1, int btn_pl2) {
 
 	//declare variables
-	int row, col;
-	int i;
-	int pl_ongoing = 1;
+	int row, col, i;
 	//some beautiful ascii art (the button)
 	const char *btn_ascii[]={"              .,-:;//;:=,", "          . :H@@@MM@M#H/.,+%;,", "       ,/X+ +M@@M@MM%=,-%HMMM@X/,", "     -+@MM; $M@@MH+-,;XMMMM@MMMM@+-", "    ;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.", "  ,%MM@@MH ,@%=             .---=-=:=,.", "  =@#@@@MX.,                -%HX$$%%%:;", " =-./@M@M$                   .;@MMMM@MM:", " X@/ -$MM/                    . +MM@@@M$", ",@M@H: :@:                    . =X#@@@@-", ",@@@MMX, .                    /H- ;@M@M=", ".H@@@@M@+,                    %MM+..%#$.", " /MMMM@MMH/.                  XM@MH; =;", "  /%+%$XHH@$=              , .H@@@@MX,", "   .=--------.           -%H.,@@@@@MX,", "   .%MM@@@HHHXX$$$%+- .:$MMX =M@@MM%.", "     =XMMM@MM@MM#H;,-+HMM@M+ /MMMX=", "       =%@M@M#@$-.=$@MM@@@M; %M%=", "         ,:+$+-,/H#MMMMMMM@= =,", "               =++%%%%+/:-."};
 	char win_txt[]="Winner!";
 	char loser_txt[]="Loser!";
+	char play_again_txt[]="Press any key to play again (F1 to exit)";
+	char creator_txt[]="Written with <3 by willeponken";
 	//get max y & x value
 	getmaxyx(stdscr, row, col);
 
-	while(pl_ongoing == 1) {
+	while(1) {
 
 		clear();
 
@@ -145,11 +148,11 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 			mvprintw((row-20)/2+i, (col-40)/2, "%s\n", btn_ascii[i]);
 		}
 
-		//print player names & buttons
+		//print player names & buttons & creator text
 		mvprintw(row-1, 1, "Player 1 (%d)", btn_pl1);
 		mvprintw(row-1, col-(floor(log10(abs(btn_pl2))))-13, "Player 2 (%d)", btn_pl2);
-		mvprintw(1, 1, "F1 - Exit");
-	
+		mvprintw(1, (col-strlen(creator_txt))/2, "%s", creator_txt);
+
 		refresh();
 
 		//time to play
@@ -173,27 +176,45 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 			refresh();
 			}
 		}
+		
+		int btn_int, cont_game = 1;
+		
+		while (cont_game == 1) {
+		
+			btn_int = nb_getch();
 
-		int btn_int = nb_getch();
-
-		if(btn_int == btn_pl1 && wait_until > time(0)) {
-			mvprintw(row/2, (col-40-strlen(loser_txt))/4, "%s", loser_txt);
-			mvprintw(row/2, col-(col-40)/4-(strlen(win_txt)/2), "%s", win_txt);
-		} else if(btn_int == btn_pl2 && wait_until > time(0)) {
-			mvprintw(row/2, (col-40-strlen(win_txt))/4, "%s", win_txt);
-			mvprintw(row/2, col-(col-40)/4-(strlen(loser_txt)/2), "%s", loser_txt);
-		} else if(btn_int == btn_pl1 && wait_until <= time(0)) {
-			mvprintw(row/2, (col-40-strlen(win_txt))/4, "%s", win_txt);
-			mvprintw(row/2, col-(col-40)/4-(strlen(loser_txt)/2), "%s", loser_txt);
-		} else if(btn_int == btn_pl2 && wait_until <= time(0)) {
-			mvprintw(row/2, (col-40-strlen(loser_txt))/4, "%s", loser_txt);
-			mvprintw(row/2, col-(col-40)/4-(strlen(win_txt)/2), "%s", win_txt);
+			if(btn_int == btn_pl1 && wait_until > time(0)) {
+				mvprintw(row/2, (col-40-strlen(loser_txt))/4, "%s", loser_txt);
+				mvprintw(row/2, col-(col-40)/4-(strlen(win_txt)/2), "%s", win_txt);
+				cont_game = 0;
+			} else if(btn_int == btn_pl2 && wait_until > time(0)) {
+				mvprintw(row/2, (col-40-strlen(win_txt))/4, "%s", win_txt);
+				mvprintw(row/2, col-(col-40)/4-(strlen(loser_txt)/2), "%s", loser_txt);
+				cont_game = 0;
+			} else if(btn_int == btn_pl1 && wait_until <= time(0)) {
+				mvprintw(row/2, (col-40-strlen(win_txt))/4, "%s", win_txt);
+				mvprintw(row/2, col-(col-40)/4-(strlen(loser_txt)/2), "%s", loser_txt);
+				cont_game = 0;
+			}else if(btn_int == btn_pl2 && wait_until <= time(0)) {
+				mvprintw(row/2, (col-40-strlen(loser_txt))/4, "%s", loser_txt);
+				mvprintw(row/2, col-(col-40)/4-(strlen(win_txt)/2), "%s", win_txt);
+				cont_game = 0;
+			}
 		}
 
-	pl_ongoing = 0;
-	refresh();
+		mvprintw(row-1, (col-strlen(play_again_txt))/2, "%s", play_again_txt);
+
+		switch(getch()) {
+			//exit
+			case KEY_F(1):
+				endwin();
+				exit(0);
+				break;
+			//other button
+			default:
+				break;
+		}
 	}
-	getch();
 	return 0;
 }
 
@@ -203,14 +224,17 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 //the keyboard input and also the timer (using termios)
 void reset_terminal_mode() {
 	tcsetattr(0, TCSANOW, &orig_termios);
+	system("reset"); //quick bugfix because the pipe isn't closed properly
 }
 
 void set_conio_terminal_mode() {
 	struct termios new_termios;
 
+	//make a copy of orig_termios
 	tcgetattr(0, &orig_termios);
 	memcpy(&new_termios, &orig_termios, sizeof(new_termios));
 	
+	//close pipe at exit
 	atexit(reset_terminal_mode);
 	cfmakeraw(&new_termios);
 	tcsetattr(0, TCSANOW, &new_termios);
