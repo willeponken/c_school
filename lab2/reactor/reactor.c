@@ -23,10 +23,8 @@ int main(void) {
 	
 	//declare variables
 	int row,col;
-	//init ncurses
-	initscr();
-	//get largest y & x coordinates
-	getmaxyx(stdscr, row, col);
+	initscr(); //init ncurses
+	getmaxyx(stdscr, row, col); //get largest y & x coordinates
 	//check color support & terminal size
 	if (has_colors() == FALSE) {
 		endwin();
@@ -37,16 +35,12 @@ int main(void) {
 		printf("Too small terminal window, please restart with a larger window (x: %d, y: %d\n", col, row);
 		exit(1);
 	}
-	//enable color
-	start_color();
-	//disable line buffering
-	raw();
-	//get F1, F2 etc...
-	keypad(stdscr, TRUE);
-	//don't echo any input
-	noecho();
-	//hide the cursor
-	curs_set(0);
+	
+	start_color(); //enable color
+	raw(); //disable line buffering
+	keypad(stdscr, TRUE); //get F1, F2 etc...
+	noecho(); //don't echo any input
+	curs_set(0); //hide the cursor
 
 	//call menu
 	draw_menu();
@@ -60,27 +54,21 @@ int main(void) {
 //also have responsibility for getting user input for each enviroment
 int draw_menu(void) {
 
-	int row,col;
+	//declare variables
+	const char welcome_pl1[]="Welcome to reactor, please input Player 1's button";	
+	const char welcome_pl2[]="Now input Player 2's button";
+	const char declared_btn[]="Is this correct? (y/n (c to cancel))";
+	const char creator_txt[]="Written with <3 by willeponken";
+	int row, col, btn_pl1, btn_pl2, pl_declared = 0;
 
-	int btn_pl1, btn_pl2;
-
+	//insert max y & x coordinates to row & col
 	getmaxyx(stdscr, row, col);
-
-	int pl_declared = 0;
 
 	while(pl_declared == 0) {
 
-		//declare variables
-		char welcome_pl1[]="Welcome to reactor, please input Player 1's button";	
-		char welcome_pl2[]="Now input Player 2's button";
-		char declared_btn[]="Is this correct? (y/n (c to cancel))";
-		char creator_txt[]="Written with <3 by willeponken";
-
 		clear();
 
-		//bold text
-		attron(A_BOLD);
-
+		attron(A_BOLD); //bold text
 		//get player 1's button
 		mvprintw(row/2, (col-strlen(welcome_pl1))/2, "%s", welcome_pl1);
 		mvprintw(1, (col-strlen(creator_txt))/2, "%s", creator_txt);
@@ -98,8 +86,7 @@ int draw_menu(void) {
 		//print player buttons and ask if it's correct
 		mvprintw(row/2, (col-strlen(declared_btn))/2, "%s", declared_btn);
 		mvprintw(1, (col-strlen(creator_txt))/2, "%s", creator_txt);
-		//turn bold text off
-		attroff(A_BOLD);
+		attroff(A_BOLD); //turn bold text off
 		//print declared player buttons, subtracting with 23 because
 		//that is the number of letters between btn_pl1 & btn_pl2
 		mvprintw(row/2+1, (col-((floor(log10(abs(btn_pl1))))+(floor(log10(abs(btn_pl2)))))-23)/2, "Player 1: %d & Player 2: %d", btn_pl1, btn_pl2);
@@ -132,10 +119,11 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 	int row, col, i;
 	//some beautiful ascii art (the button)
 	const char *btn_ascii[]={"              .,-:;//;:=,", "          . :H@@@MM@M#H/.,+%;,", "       ,/X+ +M@@M@MM%=,-%HMMM@X/,", "     -+@MM; $M@@MH+-,;XMMMM@MMMM@+-", "    ;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.", "  ,%MM@@MH ,@%=             .---=-=:=,.", "  =@#@@@MX.,                -%HX$$%%%:;", " =-./@M@M$                   .;@MMMM@MM:", " X@/ -$MM/                    . +MM@@@M$", ",@M@H: :@:                    . =X#@@@@-", ",@@@MMX, .                    /H- ;@M@M=", ".H@@@@M@+,                    %MM+..%#$.", " /MMMM@MMH/.                  XM@MH; =;", "  /%+%$XHH@$=              , .H@@@@MX,", "   .=--------.           -%H.,@@@@@MX,", "   .%MM@@@HHHXX$$$%+- .:$MMX =M@@MM%.", "     =XMMM@MM@MM#H;,-+HMM@M+ /MMMX=", "       =%@M@M#@$-.=$@MM@@@M; %M%=", "         ,:+$+-,/H#MMMMMMM@= =,", "               =++%%%%+/:-."};
-	char win_txt[]="Winner!";
-	char loser_txt[]="Loser!";
-	char play_again_txt[]="Press any key to play again (F1 to exit)";
-	char creator_txt[]="Written with <3 by willeponken";
+	//other texts
+	const char win_txt[]="Winner!";
+	const char loser_txt[]="Loser!";
+	const char play_again_txt[]="Do you wish to play again? (y/n)";
+	const char creator_txt[]="Written with <3 by willeponken";
 	//get max y & x value
 	getmaxyx(stdscr, row, col);
 
@@ -177,7 +165,7 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 			}
 		}
 		
-		int btn_int, cont_game = 1;
+		int btn_int, cont_game = 1, cont_ask = 1;
 		
 		while (cont_game == 1) {
 		
@@ -195,7 +183,7 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 				mvprintw(row/2, (col-40-strlen(win_txt))/4, "%s", win_txt);
 				mvprintw(row/2, col-(col-40)/4-(strlen(loser_txt)/2), "%s", loser_txt);
 				cont_game = 0;
-			}else if(btn_int == btn_pl2 && wait_until <= time(0)) {
+			} else if(btn_int == btn_pl2 && wait_until <= time(0)) {
 				mvprintw(row/2, (col-40-strlen(loser_txt))/4, "%s", loser_txt);
 				mvprintw(row/2, col-(col-40)/4-(strlen(win_txt)/2), "%s", win_txt);
 				cont_game = 0;
@@ -203,16 +191,21 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 		}
 
 		mvprintw(row-1, (col-strlen(play_again_txt))/2, "%s", play_again_txt);
+		
+		refresh();
 
-		switch(getch()) {
-			//exit
-			case KEY_F(1):
-				endwin();
-				exit(0);
-				break;
-			//other button
-			default:
-				break;
+		while (cont_ask == 1) {
+
+			btn_int = nb_getch();
+				
+				//n (exit)
+				if (btn_int == 110) {
+					endwin();
+					exit(0);
+				//y (replay)
+				} else if (btn_int == 121)
+					cont_ask = 0;
+
 		}
 	}
 	return 0;
