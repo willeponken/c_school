@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 
 	//check argument count (argc)
 	if (argc < 2) {
-		printf("\nWelcome to mod!\nA litte small useless modulizer\nwritten with <3 in C by willeponken.\nThere was no arguments specified.\nPlease re-run mod with arguments.\n\nAvailable arguments:\n-c [start] [end], ex: '-c 1 100' will count all numbers from 1 to 100.\n-m [mod], ex: '-m 4' will modulize with 4.\n\n");
+		printf("\nWelcome to mod!\nA litte small useless modulizer\nwritten with <3 in C by willeponken.\nThere was no arguments specified.\nPlease re-run mod with arguments.\n\nAvailable arguments:\n-c [start] [end], ex: '-c 1 100' will count all numbers from 1 to 100.\n-m [mod], ex: '-m 4 5' will modulize with 4 and 5.\n\n");
 	} else {
 		printf("\nWelcome to mod!\nA litte small useless modulizer\nwritten with <3 in C by willeponken.\n");
 		
@@ -108,7 +108,7 @@ void modulizer(int start, int end, int mod[], int mod_c) {
 		} else if (mod[mod_index] == 0) {
 
 			//tell the user that you cannot divide by zero (kinda)
-			printf("Black holes are where God divided by zero.\n	- Albert Eintein\n");
+			printf("'Black holes are where God divided by zero.'\n  — Albert Eintein\n");
 
 		} else if (start > end) {
 
