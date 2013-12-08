@@ -1,4 +1,4 @@
 CFLAGS=-Wall -g -lcurses -lm
 
 clean:
-	rm -f test
+	rm -f reactor
