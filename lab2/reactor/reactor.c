@@ -146,7 +146,7 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 		//time to play
 		//declare random number
 		srand(time(NULL)); //seed for rand
-		int wait_until = time(0) + (rand() % 10) + 2;
+		int wait_until = time(0) + (rand() % 4) + 1; //random number from 1 to 5
 		//declare other variables
 		int painted_ascii = 0;
 
@@ -213,7 +213,7 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 
 
 //everything below, from "reset_terminal_mode" to  "getch" 
-//is for creating a non-blocking I/O to be able to handle both
+//is for creating a non-blocking I/O (asynchronous) to be able to handle both
 //the keyboard input and also the timer (using termios)
 void reset_terminal_mode() {
 	tcsetattr(0, TCSANOW, &orig_termios);
