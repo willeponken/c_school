@@ -87,21 +87,21 @@ int draw_menu(void) {
 		attron(A_BOLD); //bold text
 		//get player 1's button
 		mvprintw(row/2, (col-strlen(welcome_pl1))/2, "%s", welcome_pl1);
-		mvprintw(1, (col-strlen(creator_txt))/2, "%s", creator_txt);
+		mvprintw(0, (col-strlen(creator_txt))/2, "%s", creator_txt);
 		btn_pl1 = getch();
 
 		clear();
 	
 		//get player 2's button
 		mvprintw(row/2, (col-strlen(welcome_pl2))/2, "%s", welcome_pl2);
-		mvprintw(1, (col-strlen(creator_txt))/2, "%s", creator_txt);
+		mvprintw(0, (col-strlen(creator_txt))/2, "%s", creator_txt);
 		btn_pl2 = getch();
 
 		clear();
 
 		//print player buttons and ask if it's correct
 		mvprintw(row/2, (col-strlen(declared_btn))/2, "%s", declared_btn);
-		mvprintw(1, (col-strlen(creator_txt))/2, "%s", creator_txt);
+		mvprintw(0, (col-strlen(creator_txt))/2, "%s", creator_txt);
 		attroff(A_BOLD); //turn bold text off
 		//print declared player buttons, subtracting with 23 because
 		//that is the number of letters between btn_pl1 & btn_pl2
@@ -134,7 +134,7 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 	//declare variables
 	int row, col, i;
 	//some beautiful ascii art (the button)
-	const char *btn_ascii[]={"              .,-:;//;:=,", "          . :H@@@MM@M#H/.,+%;,", "       ,/X+ +M@@M@MM%=,-%HMMM@X/,", "     -+@MM; $M@@MH+-,;XMMMM@MMMM@+-", "    ;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.", "  ,%MM@@MH ,@%=             .---=-=:=,.", "  =@#@@@MX.,                -%HX$$%%%:;", " =-./@M@M$                   .;@MMMM@MM:", " X@/ -$MM/                    . +MM@@@M$", ",@M@H: :@:                    . =X#@@@@-", ",@@@MMX, .                    /H- ;@M@M=", ".H@@@@M@+,                    %MM+..%#$.", " /MMMM@MMH/.                  XM@MH; =;", "  /%+%$XHH@$=              , .H@@@@MX,", "   .=--------.           -%H.,@@@@@MX,", "   .%MM@@@HHHXX$$$%+- .:$MMX =M@@MM%.", "     =XMMM@MM@MM#H;,-+HMM@M+ /MMMX=", "       =%@M@M#@$-.=$@MM@@@M; %M%=", "         ,:+$+-,/H#MMMMMMM@= =,", "               =++%%%%+/:-."};
+const char *btn_ascii[]={"              .,-:;//;:=,", "          . :H@@@MM@M#H/.,+%;,", "       ,/X+ +M@@M@MM%=,-%HMMM@X/,", "     -+@MM; $M@@MH+-,;XMMMM@MMMM@+-", "    ;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.", "  ,%MM@@MH ,@%=             .---=-=:=,.", "  =@#@@@MX.,                -%HX$$%%%:;", " =-./@M@M$                   .;@MMMM@MM:", " X@/ -$MM/                    . +MM@@@M$", ",@M@H: :@:                    . =X#@@@@-", ",@@@MMX, .                    /H- ;@M@M=", ".H@@@@M@+,                    %MM+..%#$.", " /MMMM@MMH/.                  XM@MH; =;", "  /%+%$XHH@$=              , .H@@@@MX,", "   .=--------.           -%H.,@@@@@MX,", "   .%MM@@@HHHXX$$$%+- .:$MMX =M@@MM%.", "     =XMMM@MM@MM#H;,-+HMM@M+ /MMMX=", "       =%@M@M#@$-.=$@MM@@@M; %M%=", "         ,:+$+-,/H#MMMMMMM@= =,", "               =++%%%%+/:-."};
 	//other texts
 	const char win_txt[]="Winner!";
 	const char loser_txt[]="Loser!";
@@ -142,6 +142,8 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 	const char creator_txt[]="Written with <3 by willeponken";
 	//get max y & x value
 	getmaxyx(stdscr, row, col);
+	//set color pair for 1
+	init_pair(1, COLOR_RED, COLOR_BLACK);
 
 	while(1) {
 
@@ -155,7 +157,7 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 		//print player names & buttons & creator text
 		mvprintw(row-1, 1, "Player 1 (%d)", btn_pl1);
 		mvprintw(row-1, col-(floor(log10(abs(btn_pl2))))-13, "Player 2 (%d)", btn_pl2);
-		mvprintw(1, (col-strlen(creator_txt))/2, "%s", creator_txt);
+		mvprintw(0, (col-strlen(creator_txt))/2, "%s", creator_txt);
 
 		refresh();
 
@@ -171,7 +173,6 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 		while(!kbhit()) {
 			if(wait_until <= time(0) && painted_ascii == 0) {
 				for(i=0; i<20;i++){
-					init_pair(1, COLOR_RED, COLOR_BLACK);
 					attron(COLOR_PAIR(1));
 					mvprintw((row-20)/2+i, (col-40)/2, "%s\n", btn_ascii[i]);
 					attroff(COLOR_PAIR(1));
@@ -190,18 +191,31 @@ int draw_arena(int btn_pl1, int btn_pl2) {
 			if(btn_int == btn_pl1 && wait_until > time(0)) {
 				mvprintw(row/2, (col-40-strlen(loser_txt))/4, "%s", loser_txt);
 				mvprintw(row/2, col-(col-40)/4-(strlen(win_txt)/2), "%s", win_txt);
+				attron(COLOR_PAIR(1));
+				mvprintw(row-1, 1, "Player 1 (%d)", btn_pl1);
+				attroff(COLOR_PAIR(1));
 				cont_game = 0;
 			} else if(btn_int == btn_pl2 && wait_until > time(0)) {
 				mvprintw(row/2, (col-40-strlen(win_txt))/4, "%s", win_txt);
 				mvprintw(row/2, col-(col-40)/4-(strlen(loser_txt)/2), "%s", loser_txt);
+				attron(COLOR_PAIR(1));
+				mvprintw(row-1, col-(floor(log10(abs(btn_pl2))))-13, "Player 2 (%d)", btn_pl2);
+				attroff(COLOR_PAIR(1));
 				cont_game = 0;
 			} else if(btn_int == btn_pl1 && wait_until <= time(0)) {
 				mvprintw(row/2, (col-40-strlen(win_txt))/4, "%s", win_txt);
 				mvprintw(row/2, col-(col-40)/4-(strlen(loser_txt)/2), "%s", loser_txt);
+				attron(COLOR_PAIR(1));
+				mvprintw(row-1, col-(floor(log10(abs(btn_pl2))))-13, "Player 2 (%d)", btn_pl2);
+				attroff(COLOR_PAIR(1));
 				cont_game = 0;
 			} else if(btn_int == btn_pl2 && wait_until <= time(0)) {
 				mvprintw(row/2, (col-40-strlen(loser_txt))/4, "%s", loser_txt);
 				mvprintw(row/2, col-(col-40)/4-(strlen(win_txt)/2), "%s", win_txt);
+				attron(COLOR_PAIR(1));
+				mvprintw(row-1, 1, "Player 1 (%d)", btn_pl1);
+				attron(COLOR_PAIR(1));
+				attroff(COLOR_PAIR(1));
 				cont_game = 0;
 			}
 		}
