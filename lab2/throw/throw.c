@@ -2,7 +2,7 @@
 #include <assert.h>
 
 //declare functions:
-double calc_throw();
+int calc_throw(float v_0, float t, float g);
 
 //main function:
 int main () {
@@ -27,14 +27,13 @@ int main () {
 
 
 //calculate throw:
-double calc_throw (float v_0, float t, float g) {
+int calc_throw (float v_0, float t, float g) {
 
-       	float v = v_0 + g * t;
+  float v = v_0 + g * t;
 	float s = v * t;
 
 	printf("v: %f\ns: %f\ng: %f\n", v, s, g);
 
-        return 0;
+    return 0;
 
 }
-
